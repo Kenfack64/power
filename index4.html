@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier des Charges | Solutions Digitales Paroissiales Cameroun</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .document-container {
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            max-width: 1200px;
+            position: relative;
+        }
+        
+        .document-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .download-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-download {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-download:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .document-logo {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .document-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .document-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .document-body {
+            padding: 40px;
+        }
+        
+        .section-title {
+            position: relative;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .section-card {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list li i {
+            color: var(--success);
+            margin-right: 10px;
+        }
+        
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .pricing-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .pricing-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .pricing-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--secondary);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 60px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--secondary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--secondary);
+        }
+        
+        .dashboard-preview {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--secondary);
+        }
+        
+        .contact-info {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success);
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .price-range {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .price-option {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            flex: 1;
+            max-width: 300px;
+        }
+        
+        .price-option.recommended {
+            border: 3px solid var(--success);
+            transform: scale(1.05);
+            position: relative;
+        }
+        
+        .recommended-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .special-offer {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .document-container {
+                box-shadow: none;
+                margin: 0;
+            }
+            
+            .footer, .download-buttons {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .document-body {
+                padding: 20px;
+            }
+            
+            .document-title {
+                font-size: 1.8rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-buttons {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+            
+            .price-range {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .price-option.recommended {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container" id="document-content">
+        <!-- En-tête du document -->
+        <div class="document-header">
+            <div class="download-buttons">
+                <button class="btn-download" onclick="generatePDF()">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+                <button class="btn-download" onclick="exportToWord()">
+                    <i class="fas fa-file-word"></i> Word
+                </button>
+                <button class="btn-download" onclick="window.print()">
+                    <i class="fas fa-print"></i> Imprimer
+                </button>
+            </div>
+            
+            <div class="document-logo">
+                <i class="fas fa-church"></i>
+            </div>
+            <h1 class="document-title">Cahier des Charges</h1>
+            <p class="document-subtitle">Solutions Digitales Paroissiales - Cameroun</p>
+            <p>Plateforme complète de gestion et de digitalisation des paroisses</p>
+        </div>
+        
+        <!-- Corps du document -->
+        <div class="document-body">
+            <!-- Section Introduction -->
+            <section id="introduction">
+                <h2 class="section-title">1. Introduction et Contexte</h2>
+                <div class="section-card">
+                    <h4>Contexte du Projet</h4>
+                    <p>Les paroisses au Cameroun font face à des défis croissants dans la gestion de leurs activités, la communication avec les fidèles et la collecte de fonds. La digitalisation offre une opportunité unique d'optimiser ces processus tout en renforçant la mission spirituelle.</p>
+                    
+                    <h5 class="mt-4">Objectifs Principaux</h5>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Moderniser la gestion administrative des paroisses</li>
+                        <li><i class="fas fa-check"></i> Améliorer la communication avec la communauté</li>
+                        <li><i class="fas fa-check"></i> Faciliter la collecte de dons en ligne</li>
+                        <li><i class="fas fa-check"></i> Digitaliser les sacrements et événements</li>
+                        <li><i class="fas fa-check"></i> Créer une plateforme unifiée accessible à tous</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Section Portée du Projet -->
+            <section id="portee">
+                <h2 class="section-title">2. Portée du Projet</h2>
+                <div class="section-card">
+                    <h4>Modules Principaux Inclus</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-globe text-primary"></i> Site Web Paroissial</h6>
+                            <ul class="feature-list">
+                                <li>Design responsive et adaptatif</li>
+                                <li>Gestion de contenu intuitive</li>
+                                <li>Horaires des messes et événements</li>
+                                <li>Galerie photos et médias</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-donate text-success"></i> Gestion des Dons</h6>
+                            <ul class="feature-list">
+                                <li>Dons en ligne sécurisés</li>
+                                <li>Paiements mobile money</li>
+                                <li>Suivi des contributions</li>
+                                <li>Reçus automatiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-users text-info"></i> Espace Communautaire</h6>
+                            <ul class="feature-list">
+                                <li>Annuaire des membres</li>
+                                <li>Groupes et communautés</li>
+                                <li>Forum de discussion</li>
+                                <li>Partage de prières</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-calendar-alt text-warning"></i> Gestion des Événements</h6>
+                            <ul class="feature-list">
+                                <li>Calendrier interactif</li>
+                                <li>Inscriptions en ligne</li>
+                                <li>Rappels automatiques</li>
+                                <li>Billetterie intégrée</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Tableaux de Bord -->
+            <section id="dashboards">
+                <h2 class="section-title">3. Tableaux de Bord Personnalisés</h2>
+                
+                <div class="section-card">
+                    <h4>5 Tableaux de Bord Spécialisés</h4>
+                    
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h5><i class="fas fa-crown text-warning"></i> Administrateur</h5>
+                            <p>Vue d'ensemble complète avec statistiques et gestion système</p>
+                            <div class="mt-3">
+                                <span class="badge bg-warning">Tableau de bord</span>
+                                <span class="badge bg-warning">Gestion membres</span>
+                                <span class="badge bg-warning">Rapports</span>
+                                <span class="badge bg-warning">Paramètres</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card">
+                            <h5><i class="fas fa-user-tie text-primary"></i> Secrétaire</h5>
+                            <p>Gestion administrative et communication</p>
+                            <div class="mt-3">
+                                <span class="badge bg-primary">Calendrier</span>
+                                <span class="badge bg-primary">Contacts</span>
+                                <span class="badge bg-primary">Documents</span>
+                                <span class="badge bg-primary">Communications</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card">
+                            <h5><i class="fas fa-coins text-success"></i> Trésorier</h5>
+                            <p>Gestion financière et suivi des dons</p>
+                            <div class="mt-3">
+                                <span class="badge bg-success">Dons en ligne</span>
+                                <span class="badge bg-success">Dépenses</span>
+                                <span class="badge bg-success">Budget</span>
+                                <span class="badge bg-success">Rapports</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card">
+                            <h5><i class="fas fa-book text-info"></i> Catéchiste</h5>
+                            <p>Gestion des groupes et suivi des participants</p>
+                            <div class="mt-3">
+                                <span class="badge bg-info">Groupes</span>
+                                <span class="badge bg-info">Planning</span>
+                                <span class="badge bg-info">Évaluations</span>
+                                <span class="badge bg-info">Ressources</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card">
+                            <h5><i class="fas fa-users text-secondary"></i> Espace Public</h5>
+                            <p>Interface fidèles avec accès aux informations</p>
+                            <div class="mt-3">
+                                <span class="badge bg-secondary">Horaires</span>
+                                <span class="badge bg-secondary">Événements</span>
+                                <span class="badge bg-secondary">Dons</span>
+                                <span class="badge bg-secondary">Contact</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Budget et Investissement -->
+            <section id="budget">
+                <h2 class="section-title">4. Budget et Investissement</h2>
+                <div class="section-card">
+                    <h4>Offres Adaptées aux Paroisses Camerounaises</h4>
+                    
+                    <div class="special-offer">
+                        <h4><i class="fas fa-gift"></i> OFFRE SPÉCIALE DÉMARRAGE</h4>
+                        <p class="mb-0">Prix préférentiels pour les premières paroisses</p>
+                    </div>
+                    
+                    <div class="price-range">
+                        <div class="price-option">
+                            <h5>Formule Essentielle</h5>
+                            <div class="price-tag text-secondary">150 000 FCFA</div>
+                            <ul class="feature-list">
+                                <li>Site web responsive</li>
+                                <li>Dashboard administrateur</li>
+                                <li>Gestion événements de base</li>
+                                <li>Formation initiale</li>
+                                <li>Support 3 mois</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="price-option recommended">
+                            <div class="recommended-badge">RECOMMANDÉE</div>
+                            <h5>Formule Complète</h5>
+                            <div class="price-tag text-success">175 000 FCFA</div>
+                            <ul class="feature-list">
+                                <li>Tous les dashboards</li>
+                                <li>Dons en ligne</li>
+                                <li>Application mobile</li>
+                                <li>Formation complète</li>
+                                <li>Support 6 mois</li>
+                                <li>Hébergement 1 an</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="price-option">
+                            <h5>Formule Premium</h5>
+                            <div class="price-tag text-warning">200 000 FCFA</div>
+                        
+                            <ul class="feature-list">
+                                <li>Toutes fonctionnalités</li>
+                                <li>Diffusion en direct</li>
+                                <li>Formation avancée</li>
+                                <li>Support 12 mois</li>
+                                <li>Maintenance incluse</li>
+                                <li>Hébergement 2 ans</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <table class="pricing-table mt-4">
+                        <thead>
+                            <tr>
+                                <th>Service Additionnel</th>
+                                <th>Description</th>
+                                <th>Coût</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Formation Avancée</strong></td>
+                                <td>Formation personnalisée pour l'équipe</td>
+                                <td>30 000 FCFA</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Maintenance Annuelle</strong></td>
+                                <td>Mises à jour et support technique</td>
+                                <td>240 000 FCFA/an</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hébergement</strong></td>
+                                <td>Serveur et nom de domaine</td>
+                                <td>100 000 FCFA/an</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Application Mobile</strong></td>
+                                <td>Développement app mobile (optionnel)</td>
+                                <td>75 000 FCFA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="highlight mt-4">
+                        <h5>Retour sur Investissement Garanti</h5>
+                        <p>Augmentation moyenne de <strong>40% des dons</strong> dès les 3 premiers mois</p>
+                        <p>ROI estimé : <strong>2-4 mois</strong> seulement</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Planning et Livraison -->
+            <section id="planning">
+                <h2 class="section-title">5. Planning de Développement</h2>
+                <div class="section-card">
+                    <h4>Phases de Développement Accéléré</h4>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Semaine 1</div>
+                            <h6>Phase 1: Analyse et Conception</h6>
+                            <p>Spécifications détaillées, maquettes, architecture technique</p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-date">Semaines 2-4</div>
+                            <h6>Phase 2: Développement</h6>
+                            <p>Développement frontend et backend, intégration</p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-date">Semaine 5</div>
+                            <h6>Phase 3: Tests et Formation</h6>
+                            <p>Tests utilisateurs, corrections, formation de l'équipe</p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-date">Semaine 6</div>
+                            <h6>Phase 4: Déploiement</h6>
+                            <p>Mise en production, support initial, optimisation</p>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <h5>Durée Totale: 6 semaines seulement</h5>
+                        <p>Livraison rapide et efficace pour un démarrage immédiat</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Partenariat -->
+            <section id="partenariat">
+                <h2 class="section-title">6. Opportunités de Partenariat</h2>
+                <div class="section-card">
+                    <h4>Modèles de Collaboration Gagnant-Gagnant</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="dashboard-preview">
+                                <h5>Partenariat Commercial</h5>
+                                <p>Réseau de distribution avec commissions attractives</p>
+                                <ul class="feature-list">
+                                    <li><strong>Commission : 30%</strong> sur chaque vente</li>
+                                    <li>Formation commerciale fournie</li>
+                                    <li>Matériel marketing complet</li>
+                                    <li>Support technique inclus</li>
+                                    <li>Territoire exclusif négociable</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="dashboard-preview">
+                                <h5>Partenariat Stratégique</h5>
+                                <p>Collaboration à long terme pour le développement</p>
+                                <ul class="feature-list">
+                                    <li>Co-investissement dans le projet</li>
+                                    <li>Partage des revenus 60/40</li>
+                                    <li>Développement de nouvelles fonctionnalités</li>
+                                    <li>Expansion régionale conjointe</li>
+                                    <li>Visibilité mutuelle</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight mt-4">
+                        <h5>Marché Potentiel Exceptionnel</h5>
+                        <p><strong>1 500+ paroisses</strong> au Cameroun avec besoin urgent de digitalisation</p>
+                        <p>Chiffre d'affaires potentiel : <strong>225 millions FCFA/an</strong></p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Contact -->
+            <section id="contact">
+                <h2 class="section-title">7. Contact et Prochaines Étapes</h2>
+                <div class="contact-info">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Coordonnées</h5>
+                            <p><i class="fas fa-user me-2"></i> Mr KENFACK JOB</p>
+                            <p><i class="fas fa-envelope me-2"></i> Jobkenfacklncorp@gmail.com</p>
+                            <p><i class="fas fa-phone me-2"></i> +237 696 49 20 29</p>
+                            <p><i class="fas fa-map-marker-alt me-2"></i> Douala, Cameroun</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Prochaines Étapes</h5>
+                            <ul class="feature-list">
+                                <li><i class="fas fa-play-circle text-primary"></i> Présentation détaillée du projet</li>
+                                <li><i class="fas fa-play-circle text-primary"></i> Démonstration live de la plateforme</li>
+                                <li><i class="fas fa-play-circle text-primary"></i> Discussion sur le modèle de partenariat</li>
+                                <li><i class="fas fa-play-circle text-primary"></i> Signature de convention</li>
+                                <li><i class="fas fa-play-circle text-primary"></i> Démarrage immédiat du projet</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Pied de page -->
+        <div class="footer">
+            <p>&copy; 2024 Solutions Digitales Paroissiales Cameroun. Tous droits réservés.</p>
+            <p>Document confidentiel - Ne pas diffuser sans autorisation</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Génération PDF
+        function generatePDF() {
+            const element = document.getElementById('document-content');
+            const opt = {
+                margin: 10,
+                filename: 'cahier-des-charges-solutions-paroissiales.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save();
+        }
+
+        // Export Word (simulation)
+        function exportToWord() {
+            alert('Fonctionnalité d\'export Word en cours de développement.\nPour le moment, utilisez l\'impression PDF ou l\'impression directe.');
+        }
+
+        // Animation au défilement
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section-card, .price-option');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
